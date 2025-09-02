@@ -132,7 +132,11 @@ class LibraryScopedNameFinder {
 
   String _getNamedElementTypeName(Element2 typeElement, DartType type) {
     // Determine the name of the type, without type arguments.
-    assert(namesByElement.containsKey(typeElement));
+    // If the typeElement is not in the current library's namespace,
+    // fall back to using the type's display string
+    if (!namesByElement.containsKey(typeElement)) {
+      return type.getDisplayString(withNullability: true);
+    }
 
     List<DartType>? genericTypes;
     // If the type is parameterized, we recursively name its type arguments
@@ -142,14 +146,14 @@ class LibraryScopedNameFinder {
       genericTypes = type.alias?.typeArguments;
     }
 
+    final typeName = namesByElement[typeElement]!;
     if (genericTypes != null && genericTypes.isNotEmpty) {
       final typeArgNames = SurroundedCommaList(
           '<', '>', genericTypes.map(_getDartTypeName).toList());
-      return '${namesByElement[typeElement]}$typeArgNames${_nullabilitySuffixToString(type.nullabilitySuffix)}';
+      return '$typeName$typeArgNames${_nullabilitySuffixToString(type.nullabilitySuffix)}';
     }
 
-    return namesByElement[typeElement]! +
-        _nullabilitySuffixToString(type.nullabilitySuffix);
+    return typeName + _nullabilitySuffixToString(type.nullabilitySuffix);
   }
 
   String _nullabilitySuffixToString(NullabilitySuffix nullabilitySuffix) =>

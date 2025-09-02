@@ -77,6 +77,10 @@ void main() {
           description: 'generates types with import prefixes correctly',
           source: './data/valid_import_prefixed_input.dart',
           output: './data/valid_import_prefixed_output.dart'),
+      const TestInfo(
+          description: 'handles generic type inference with constraints correctly',
+          source: './data/generic_inference_bug_input.dart',
+          output: './data/generic_inference_bug_output.dart'),
     ]);
   });
 }
