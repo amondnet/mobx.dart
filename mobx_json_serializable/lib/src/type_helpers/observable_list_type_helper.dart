@@ -35,7 +35,7 @@ class ObservableListTypeHelper extends MobxTypeHelper {
     final itemType = typeArgs.first;
     final itemSerialization = context.serialize(itemType, 'e');
 
-    if (itemSerialization != null) {
+    if (itemSerialization != null && itemSerialization.toString() != 'e') {
       return '$expression.map((e) => $itemSerialization).toList()';
     }
 
@@ -55,18 +55,18 @@ class ObservableListTypeHelper extends MobxTypeHelper {
     final typeArgs = extractTypeArguments(targetType);
     if (typeArgs.isEmpty) {
       // ObservableList without type parameter - treat as List<dynamic>
-      return 'ObservableList.of(${generateNullSafeCast(expression, 'List<dynamic>')})';
+      return 'ObservableList.of(${generateNullSafeCast(expression, 'List<dynamic>', fallback: '<dynamic>[]')})';
     }
 
     final itemType = typeArgs.first;
     final itemDeserialization = context.deserialize(itemType, 'e');
 
     if (itemDeserialization != null) {
-      return 'ObservableList.of((${generateNullSafeCast(expression, 'List<dynamic>')}).map((e) => $itemDeserialization))';
+      return 'ObservableList.of((${generateNullSafeCast(expression, 'List<dynamic>', fallback: '<dynamic>[]')}).map((e) => $itemDeserialization))';
     }
 
     // Fallback: use helper method for item deserialization
     final deserializedItem = generateListItemDeserialization(itemType, 'e', context);
-    return 'ObservableList.of((${generateNullSafeCast(expression, 'List<dynamic>')}).map((e) => $deserializedItem))';
+    return 'ObservableList.of((${generateNullSafeCast(expression, 'List<dynamic>', fallback: '<dynamic>[]')}).map((e) => $deserializedItem))';
   }
 }

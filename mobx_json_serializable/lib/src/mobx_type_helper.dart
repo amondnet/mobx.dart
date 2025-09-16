@@ -25,8 +25,11 @@ abstract class MobxTypeHelper extends TypeHelper {
     return displayString == typeName || displayString.startsWith('$typeName<');
   }
 
-  /// Generate null-safe casting code
-  String generateNullSafeCast(String expression, String castType) {
+  /// Generate null-safe casting code with fallback
+  String generateNullSafeCast(String expression, String castType, {String? fallback}) {
+    if (fallback != null) {
+      return '($expression as $castType?) ?? $fallback';
+    }
     return '($expression as $castType?)';
   }
 
@@ -37,7 +40,7 @@ abstract class MobxTypeHelper extends TypeHelper {
     TypeHelperContext context,
   ) {
     final itemSerialization = context.serialize(itemType, itemExpression);
-    if (itemSerialization != null) {
+    if (itemSerialization != null && itemSerialization.toString() != itemExpression) {
       return itemSerialization.toString();
     }
     // Fallback to toJson() method or direct value
@@ -67,9 +70,22 @@ abstract class MobxTypeHelper extends TypeHelper {
 
   /// Check if a type has a toJson() method
   bool _hasToJsonMethod(DartType type) {
-    // Simplified version - assume common types have toJson() methods
-    // This can be improved later with proper analyzer API usage
-    return true; // Conservative approach - let the generated code handle the error
+    final typeString = type.getDisplayString();
+
+    // Primitive types that don't have toJson methods
+    if (typeString == 'String' || typeString == 'String?' ||
+        typeString == 'int' || typeString == 'int?' ||
+        typeString == 'double' || typeString == 'double?' ||
+        typeString == 'num' || typeString == 'num?' ||
+        typeString == 'bool' || typeString == 'bool?' ||
+        typeString == 'DateTime' || typeString == 'DateTime?' ||
+        typeString == 'dynamic') {
+      return false;
+    }
+
+    // For all other types, assume they have toJson methods
+    // This includes custom classes like SimpleModel
+    return true;
   }
 
   /// Check if a type has a fromJson() factory constructor

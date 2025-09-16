@@ -5,10 +5,8 @@ import 'todo.dart';
 part 'todo_store.g.dart';
 
 @JsonSerializable()
-class TodoStore = _TodoStore with _$TodoStore;
-
-abstract class _TodoStore with Store {
-  _TodoStore();
+class TodoStore with Store {
+  TodoStore();
 
   /// List of all todos - automatically serialized by TypeHelper
   @observable
@@ -77,6 +75,6 @@ abstract class _TodoStore with Store {
   }
 
   // Standard json_serializable methods - no custom converters needed!
-  factory _TodoStore.fromJson(Map<String, dynamic> json) => _$TodoStoreFromJson(json);
+  factory TodoStore.fromJson(Map<String, dynamic> json) => _$TodoStoreFromJson(json);
   Map<String, dynamic> toJson() => _$TodoStoreToJson(this);
 }

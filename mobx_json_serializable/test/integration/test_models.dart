@@ -11,13 +11,18 @@ class SimpleModel {
 
   SimpleModel({required this.id, required this.name});
 
-  factory SimpleModel.fromJson(Map<String, dynamic> json) => _$SimpleModelFromJson(json);
+  factory SimpleModel.fromJson(Map<String, dynamic> json) =>
+      _$SimpleModelFromJson(json);
+
   Map<String, dynamic> toJson() => _$SimpleModelToJson(this);
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is SimpleModel && runtimeType == other.runtimeType && id == other.id && name == other.name;
+      other is SimpleModel &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          name == other.name;
 
   @override
   int get hashCode => id.hashCode ^ name.hashCode;
@@ -25,10 +30,8 @@ class SimpleModel {
 
 /// Store with Observable<T> field
 @JsonSerializable()
-class ObservableStore = _ObservableStore with _$ObservableStore;
-
-abstract class _ObservableStore with Store {
-  _ObservableStore();
+class ObservableStore with Store {
+  ObservableStore();
 
   @observable
   Observable<String?> currentValue = Observable(null);
@@ -36,16 +39,16 @@ abstract class _ObservableStore with Store {
   @observable
   Observable<int> counter = Observable(0);
 
-  factory _ObservableStore.fromJson(Map<String, dynamic> json) => _$ObservableStoreFromJson(json);
+  factory ObservableStore.fromJson(Map<String, dynamic> json) =>
+      _$ObservableStoreFromJson(json);
+
   Map<String, dynamic> toJson() => _$ObservableStoreToJson(this);
 }
 
 /// Store with ObservableList<T> field
 @JsonSerializable()
-class ListStore = _ListStore with _$ListStore;
-
-abstract class _ListStore with Store {
-  _ListStore();
+class ListStore with Store {
+  ListStore();
 
   @observable
   ObservableList<String> items = ObservableList<String>();
@@ -53,33 +56,34 @@ abstract class _ListStore with Store {
   @observable
   ObservableList<SimpleModel> models = ObservableList<SimpleModel>();
 
-  factory _ListStore.fromJson(Map<String, dynamic> json) => _$ListStoreFromJson(json);
+  factory ListStore.fromJson(Map<String, dynamic> json) =>
+      _$ListStoreFromJson(json);
+
   Map<String, dynamic> toJson() => _$ListStoreToJson(this);
 }
 
 /// Store with ObservableMap<K,V> field
 @JsonSerializable()
-class MapStore = _MapStore with _$MapStore;
-
-abstract class _MapStore with Store {
-  _MapStore();
+class MapStore with Store {
+  MapStore();
 
   @observable
   ObservableMap<String, int> counters = ObservableMap<String, int>();
 
   @observable
-  ObservableMap<String, SimpleModel> modelMap = ObservableMap<String, SimpleModel>();
+  ObservableMap<String, SimpleModel> modelMap =
+      ObservableMap<String, SimpleModel>();
 
-  factory _MapStore.fromJson(Map<String, dynamic> json) => _$MapStoreFromJson(json);
+  factory MapStore.fromJson(Map<String, dynamic> json) =>
+      _$MapStoreFromJson(json);
+
   Map<String, dynamic> toJson() => _$MapStoreToJson(this);
 }
 
 /// Store with ObservableSet<T> field
 @JsonSerializable()
-class SetStore = _SetStore with _$SetStore;
-
-abstract class _SetStore with Store {
-  _SetStore();
+class SetStore with Store {
+  SetStore();
 
   @observable
   ObservableSet<String> tags = ObservableSet<String>();
@@ -87,16 +91,16 @@ abstract class _SetStore with Store {
   @observable
   ObservableSet<SimpleModel> modelSet = ObservableSet<SimpleModel>();
 
-  factory _SetStore.fromJson(Map<String, dynamic> json) => _$SetStoreFromJson(json);
+  factory SetStore.fromJson(Map<String, dynamic> json) =>
+      _$SetStoreFromJson(json);
+
   Map<String, dynamic> toJson() => _$SetStoreToJson(this);
 }
 
 /// Complex store with nested observables
 @JsonSerializable()
-class ComplexStore = _ComplexStore with _$ComplexStore;
-
-abstract class _ComplexStore with Store {
-  _ComplexStore();
+class ComplexStore with Store {
+  ComplexStore();
 
   @observable
   ObservableList<ObservableMap<String, Observable<int>>> nested =
@@ -109,6 +113,8 @@ abstract class _ComplexStore with Store {
   ObservableMap<String, Observable<SimpleModel?>> complexMap =
       ObservableMap<String, Observable<SimpleModel?>>();
 
-  factory _ComplexStore.fromJson(Map<String, dynamic> json) => _$ComplexStoreFromJson(json);
+  factory ComplexStore.fromJson(Map<String, dynamic> json) =>
+      _$ComplexStoreFromJson(json);
+
   Map<String, dynamic> toJson() => _$ComplexStoreToJson(this);
 }

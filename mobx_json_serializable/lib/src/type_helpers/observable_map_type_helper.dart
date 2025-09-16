@@ -38,7 +38,7 @@ class ObservableMapTypeHelper extends MobxTypeHelper {
     // For string keys (most common case in JSON)
     if (_isStringType(keyType)) {
       final valueSerialization = context.serialize(valueType, 'v');
-      if (valueSerialization != null) {
+      if (valueSerialization != null && valueSerialization.toString() != 'v') {
         return 'Map<String, dynamic>.from($expression.map((k, v) => MapEntry(k, $valueSerialization)))';
       }
       // Fallback
@@ -50,7 +50,8 @@ class ObservableMapTypeHelper extends MobxTypeHelper {
     final keySerialization = context.serialize(keyType, 'k');
     final valueSerialization = context.serialize(valueType, 'v');
 
-    if (keySerialization != null && valueSerialization != null) {
+    if (keySerialization != null && valueSerialization != null &&
+        keySerialization.toString() != 'k' && valueSerialization.toString() != 'v') {
       return 'Map<String, dynamic>.from($expression.map((k, v) => MapEntry($keySerialization.toString(), $valueSerialization)))';
     }
 
@@ -72,7 +73,7 @@ class ObservableMapTypeHelper extends MobxTypeHelper {
     final typeArgs = extractTypeArguments(targetType);
     if (typeArgs.isEmpty) {
       // ObservableMap without type parameters - treat as Map<dynamic, dynamic>
-      return 'ObservableMap.of(${generateNullSafeCast(expression, 'Map<String, dynamic>')})';
+      return 'ObservableMap.of(${generateNullSafeCast(expression, 'Map<String, dynamic>', fallback: '<String, dynamic>{}')})';
     }
 
     final keyType = typeArgs.first;
@@ -82,11 +83,11 @@ class ObservableMapTypeHelper extends MobxTypeHelper {
     if (_isStringType(keyType)) {
       final valueDeserialization = context.deserialize(valueType, 'v');
       if (valueDeserialization != null) {
-        return 'ObservableMap.of(Map<String, ${valueType.getDisplayString()}>.from((${generateNullSafeCast(expression, 'Map<String, dynamic>')}).map((k, v) => MapEntry(k, $valueDeserialization))))';
+        return 'ObservableMap.of(Map<String, ${valueType.getDisplayString()}>.from((${generateNullSafeCast(expression, 'Map<String, dynamic>', fallback: '<String, dynamic>{}')}).map((k, v) => MapEntry(k, $valueDeserialization))))';
       }
       // Fallback
       final deserializedValue = generateListItemDeserialization(valueType, 'v', context);
-      return 'ObservableMap.of(Map<String, ${valueType.getDisplayString()}>.from((${generateNullSafeCast(expression, 'Map<String, dynamic>')}).map((k, v) => MapEntry(k, $deserializedValue))))';
+      return 'ObservableMap.of(Map<String, ${valueType.getDisplayString()}>.from((${generateNullSafeCast(expression, 'Map<String, dynamic>', fallback: '<String, dynamic>{}')}).map((k, v) => MapEntry(k, $deserializedValue))))';
     }
 
     // For non-string keys, we need to deserialize both key and value
@@ -94,13 +95,13 @@ class ObservableMapTypeHelper extends MobxTypeHelper {
     final valueDeserialization = context.deserialize(valueType, 'v');
 
     if (keyDeserialization != null && valueDeserialization != null) {
-      return 'ObservableMap.of(Map<${keyType.getDisplayString()}, ${valueType.getDisplayString()}>.from((${generateNullSafeCast(expression, 'Map<String, dynamic>')}).map((k, v) => MapEntry($keyDeserialization, $valueDeserialization))))';
+      return 'ObservableMap.of(Map<${keyType.getDisplayString()}, ${valueType.getDisplayString()}>.from((${generateNullSafeCast(expression, 'Map<String, dynamic>', fallback: '<String, dynamic>{}')}).map((k, v) => MapEntry($keyDeserialization, $valueDeserialization))))';
     }
 
     // Fallback for complex types
     final deserializedKey = generateListItemDeserialization(keyType, 'k', context);
     final deserializedValue = generateListItemDeserialization(valueType, 'v', context);
-    return 'ObservableMap.of(Map<${keyType.getDisplayString()}, ${valueType.getDisplayString()}>.from((${generateNullSafeCast(expression, 'Map<String, dynamic>')}).map((k, v) => MapEntry($deserializedKey, $deserializedValue))))';
+    return 'ObservableMap.of(Map<${keyType.getDisplayString()}, ${valueType.getDisplayString()}>.from((${generateNullSafeCast(expression, 'Map<String, dynamic>', fallback: '<String, dynamic>{}')}).map((k, v) => MapEntry($deserializedKey, $deserializedValue))))';
   }
 
   /// Check if a type is String or String?

@@ -26,7 +26,8 @@ void main() {
         const converter = ObservableListConverter<String>();
 
         // Create test data
-        final originalList = ObservableList<String>.of(['item1', 'item2', 'item3']);
+        final originalList =
+            ObservableList<String>.of(['item1', 'item2', 'item3']);
 
         // Serialize
         final serialized = converter.toJson(originalList);
@@ -42,7 +43,8 @@ void main() {
         const converter = ObservableMapConverter<String, int>();
 
         // Create test data
-        final originalMap = ObservableMap<String, int>.of({'key1': 1, 'key2': 2});
+        final originalMap =
+            ObservableMap<String, int>.of({'key1': 1, 'key2': 2});
 
         // Serialize
         final serialized = converter.toJson(originalMap);
@@ -51,14 +53,16 @@ void main() {
         // Deserialize
         final deserialized = converter.fromJson(serialized);
         expect(deserialized, isA<ObservableMap<String, int>>());
-        expect(Map<String, int>.from(deserialized), equals({'key1': 1, 'key2': 2}));
+        expect(Map<String, int>.from(deserialized),
+            equals({'key1': 1, 'key2': 2}));
       });
 
       test('ObservableSetConverter works with JSON encoding/decoding', () {
         const converter = ObservableSetConverter<String>();
 
         // Create test data
-        final originalSet = ObservableSet<String>.of(['item1', 'item2', 'item3']);
+        final originalSet =
+            ObservableSet<String>.of(['item1', 'item2', 'item3']);
 
         // Serialize (sets become lists in JSON)
         final serialized = converter.toJson(originalSet);

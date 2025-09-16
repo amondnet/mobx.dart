@@ -1,8 +1,3 @@
-import 'package:json_annotation/json_annotation.dart';
-
-part 'todo.g.dart';
-
-@JsonSerializable()
 class Todo {
   final String id;
   final String title;
@@ -16,8 +11,19 @@ class Todo {
     this.completed = false,
   });
 
-  factory Todo.fromJson(Map<String, dynamic> json) => _$TodoFromJson(json);
-  Map<String, dynamic> toJson() => _$TodoToJson(this);
+  factory Todo.fromJson(Map<String, dynamic> json) => Todo(
+    id: json['id'] as String,
+    title: json['title'] as String,
+    description: json['description'] as String,
+    completed: json['completed'] as bool? ?? false,
+  );
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'title': title,
+    'description': description,
+    'completed': completed,
+  };
 
   Todo copyWith({
     String? id,
