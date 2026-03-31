@@ -1,0 +1,17 @@
+name: mobx_json_serializable_example
+description: Example usage of mobx_json_serializable package
+publish_to: none
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  mobx: ^2.5.0
+  json_annotation: ^4.8.1
+
+dev_dependencies:
+  mobx_json_serializable:
+    path: ../
+  build_runner: ^2.6.0
+  json_serializable: ^6.7.1
+  mobx_codegen: ^2.7.2
