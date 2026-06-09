@@ -1,0 +1,7 @@
+targets:
+  $default:
+    builders:
+      mobx_json_serializable|mobx_json_serializable_generator:
+        enabled: true
+        options:
+          explicit_to_json: true

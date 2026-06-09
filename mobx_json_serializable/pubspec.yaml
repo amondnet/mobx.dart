@@ -1,0 +1,31 @@
+name: mobx_json_serializable
+description: Automatic JSON serialization support for MobX observable types, providing seamless json_serializable integration with zero configuration.
+version: 1.0.0
+
+repository: https://github.com/mobxjs/mobx.dart
+issue_tracker: https://github.com/mobxjs/mobx.dart/issues
+homepage: https://mobx.netlify.app
+topics:
+  - reactive-programming
+  - state-management
+  - json
+  - serialization
+  - codegen
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  analyzer: '>=7.4.0 <8.0.0'
+  build: ^3.0.0
+  json_annotation: ^4.8.1
+  json_serializable: ^6.7.1
+  mobx: ^2.5.0
+  source_gen: ^3.0.0
+
+dev_dependencies:
+  build_runner: ^2.6.0
+  build_test: ^3.3.0
+  coverage: ^1.8.0
+  lints: ^5.0.0
+  test: ^1.20.1

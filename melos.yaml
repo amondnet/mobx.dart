@@ -7,6 +7,7 @@ packages:
   - mobx_examples
   - mobx_lint
   - mobx_lint_flutter_test
+  - mobx_json_serializable
 
 scripts:
   analyze:
